@@ -12,6 +12,12 @@ if [ -z "$AZURE_WEBAPP_NAME" ]; then
   exit 1
 fi
 
+# Ensure user is logged in to Azure
+if ! az account show >/dev/null 2>&1; then
+  echo "Azure CLI is installed but you're not logged in. Run 'az login' to continue."
+  exit 1
+fi
+
 az webapp up --name "$AZURE_WEBAPP_NAME" --runtime "NODE:18-lts" --sku F1 --verbose
 
 # If you have a zip package to deploy, use:

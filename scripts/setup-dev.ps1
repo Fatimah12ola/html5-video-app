@@ -1,5 +1,6 @@
 param(
-    [switch]$SkipDependencies
+    [switch]$SkipDependencies,
+    [switch]$CheckTools
 )
 
 $projectRoot = Resolve-Path -Path ((Split-Path -Parent $MyInvocation.MyCommand.Path) + "\..")
@@ -21,6 +22,17 @@ $envExample = Join-Path $projectRoot '.env.example'
 if (-not (Test-Path $envFile) -and (Test-Path $envExample)) { Copy-Item -Path $envExample -Destination $envFile }
 
 Write-Host "Created uploads and data folders (if missing) and ensured data/videos.json exists."
+
+# Optionally run tools check
+if ($CheckTools) {
+    if (Get-Command -Name "pwsh" -ErrorAction SilentlyContinue) {
+        Write-Host "Running scripts/check-tools.ps1..."
+        & "$projectRoot\scripts\check-tools.ps1"
+    } else {
+        Write-Host "Running tools check script..."
+        & "$projectRoot\scripts\check-tools.ps1"
+    }
+}
 
 # If npm exists and dependencies not skipped, install
 if ($SkipDependencies) {

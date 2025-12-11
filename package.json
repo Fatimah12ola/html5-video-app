@@ -7,6 +7,10 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "setup": "powershell -ExecutionPolicy Bypass -File scripts/setup-dev.ps1",
+    "check-tools": "bash scripts/check-tools.sh || powershell -ExecutionPolicy Bypass -File scripts/check-tools.ps1",
+    "create-repo": "bash scripts/create-github-repo.sh || powershell -ExecutionPolicy Bypass -File scripts/create-github-repo.ps1",
+    "deploy-bicep": "bash scripts/deploy-bicep.sh",
+    "deploy-azure": "bash scripts/deploy-azure.sh",
     "test": "jest --runInBand",
     "build": "echo 'Build step not defined'",
     "deploy": "echo 'Deploy step not defined'"

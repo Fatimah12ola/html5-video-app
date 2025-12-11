@@ -8,6 +8,14 @@ if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
+# Verify the user logged in to Azure
+try {
+    az account show >/dev/null 2>&1
+} catch {
+    Write-Host "Azure CLI is installed, but you're not logged in. Run 'az login' and try again."
+    exit 1
+}
+
 az webapp up --name $WebAppName --runtime "NODE:18-lts" --sku F1 --verbose
 
 if ($env:AZURE_STORAGE_CONNECTION_STRING) {
