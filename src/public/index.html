@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Video Upload App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Your Video</h1>
+        <input type="file" id="videoUpload" accept="video/*">
+        <button id="uploadButton">Upload</button>
+        <div id="videoList"></div>
+        <div id="commentsSection">
+            <h2>Comments</h2>
+            <textarea id="commentInput" placeholder="Leave a comment..."></textarea>
+            <button id="commentButton">Submit Comment</button>
+            <div id="commentsList"></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

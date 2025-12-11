@@ -1,0 +1,19 @@
+{
+  "azure": {
+    "storage": {
+      "connectionString": "<Your_Azure_Storage_Connection_String>",
+      "containerName": "videos"
+    },
+    "cosmosDb": {
+      "endpoint": "<Your_Cosmos_DB_Endpoint>",
+      "key": "<Your_Cosmos_DB_Key>",
+      "databaseName": "VideoAppDB",
+      "videoCollection": "Videos",
+      "commentCollection": "Comments"
+    }
+  },
+  "app": {
+    "port": 3000,
+    "env": "production"
+  }
+}
