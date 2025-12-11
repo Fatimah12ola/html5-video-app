@@ -98,6 +98,20 @@ html5-video-app
    npm start
    ```
 
+Create a GitHub repo and push your code (optional):
+```bash
+# 1) Create a GitHub repo and push (requires GitHub CLI or create the repo manually in GitHub)
+# Make sure you are on the main branch
+git branch -M main
+# Create using GitHub CLI and push your code:
+gh auth login    # (only if you haven't authenticated)
+gh repo create <your-username>/html5-video-app --public --source . --remote origin --push
+
+# Or add a remote manually and push
+git remote add origin https://github.com/<your-username>/html5-video-app.git
+git push -u origin main
+```
+
 Local Testing / Try It
 ```
 # Upload a test file (PowerShell uses curl alias; use system curl.exe if needed)
