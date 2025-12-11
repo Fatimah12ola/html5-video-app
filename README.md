@@ -98,6 +98,14 @@ html5-video-app
    npm start
    ```
 
+Optional helper scripts (in `scripts/`):
+
+- **Check development tools:** `npm run check-tools` or `powershell -ExecutionPolicy Bypass -File scripts/check-tools.ps1` — verifies node, npm, git, gh, az, and docker
+- **Create a GitHub repo:** `npm run create-repo` — uses `gh` to create a repo and push locally
+- **Install Azure CLI:** `scripts/install-az.sh` or `scripts/install-az.ps1` — attempts to install the Azure CLI or prints platform-specific guidance
+- **Deploy Bicep templates:** `npm run deploy-bicep` — uses `az` to deploy Bicep templates to the specified resource group
+- **Deploy to Azure Web App:** `npm run deploy-azure` — runs `az webapp up` and sets app settings from local environment
+
 Create a GitHub repo and push your code (optional):
 ```bash
 # 1) Create a GitHub repo and push (requires GitHub CLI or create the repo manually in GitHub)
