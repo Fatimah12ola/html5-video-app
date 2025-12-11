@@ -11,6 +11,7 @@
     "create-repo": "bash scripts/create-github-repo.sh || powershell -ExecutionPolicy Bypass -File scripts/create-github-repo.ps1",
     "deploy-bicep": "bash scripts/deploy-bicep.sh",
     "deploy-azure": "bash scripts/deploy-azure.sh",
+    "deploy-all": "bash scripts/deploy-all.sh",
     "test": "jest --runInBand",
     "build": "echo 'Build step not defined'",
     "deploy": "echo 'Deploy step not defined'"
