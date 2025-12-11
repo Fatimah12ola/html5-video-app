@@ -77,11 +77,55 @@ uploadButton.addEventListener('click', (event) => {
 
 // Display uploaded video
 function displayUploadedVideo(video) {
+    const container = document.createElement('div');
+    container.className = 'videoCard';
+    const title = document.createElement('div');
+    title.textContent = video.originalName || 'Video';
     const videoElement = document.createElement('video');
     videoElement.src = video.url;
     videoElement.controls = true;
     videoElement.width = 400;
-    videoList.appendChild(videoElement);
+    container.appendChild(videoElement);
+    container.appendChild(title);
+    // Generate a short thumbnail and show above the video
+    getVideoThumbnail(video.url).then((thumb) => {
+        if (thumb) {
+            const img = document.createElement('img');
+            img.src = thumb;
+            img.className = 'videoThumb';
+            img.style.maxWidth = '120px';
+            img.style.display = 'block';
+            container.insertBefore(img, videoElement);
+        }
+    }).catch(() => {});
+    videoList.appendChild(container);
+}
+
+function getVideoThumbnail(url) {
+    return new Promise((resolve, reject) => {
+        const v = document.createElement('video');
+        v.crossOrigin = 'anonymous';
+        v.src = url;
+        v.muted = true;
+        v.playsInline = true;
+        v.addEventListener('loadeddata', () => {
+            v.currentTime = 0.1;
+        });
+        v.addEventListener('seeked', () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = v.videoWidth;
+                canvas.height = v.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL('image/png');
+                resolve(dataUrl);
+            } catch (err) {
+                resolve(null);
+            }
+        });
+        v.onerror = () => reject(new Error('Video load error'));
+    });
 }
 
 // Handle comment submission

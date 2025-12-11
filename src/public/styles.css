@@ -17,6 +17,9 @@ h1 {
 .video-upload {
     margin-bottom: 20px;
 }
+#videoList { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.videoCard { background: rgba(255,255,255,0.06); padding: 10px; border-radius: 6px; color: #fff; }
+.videoThumb { display:block; margin-bottom: 8px; border-radius: 4px; }
 
 #thumbnailPreview {
     margin-top: 8px;
