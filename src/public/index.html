@@ -9,8 +9,14 @@
 <body>
     <div class="container">
         <h1>Upload Your Video</h1>
-        <input type="file" id="videoUpload" accept="video/*">
-        <button id="uploadButton">Upload</button>
+        <div class="video-upload">
+            <input type="file" id="videoUpload" accept="video/*">
+            <button id="uploadButton">Upload</button>
+            <div id="thumbnailPreview" aria-hidden="true">
+                <img id="thumbPreviewImage" src="" alt="Selected video thumbnail preview" />
+            </div>
+            <div id="uploadProgress"><div id="uploadProgressBar"></div></div>
+        </div>
         <div id="videoList"></div>
         <div id="commentsSection">
             <h2>Comments</h2>

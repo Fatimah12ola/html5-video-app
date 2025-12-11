@@ -5,27 +5,74 @@ const commentInput = document.getElementById('commentInput');
 const commentButton = document.getElementById('commentButton');
 const commentsList = document.getElementById('commentsList');
 
-// Handle video upload
-uploadButton.addEventListener('click', async (event) => {
+// Thumbnail preview generation
+const thumbPreviewImage = document.getElementById('thumbPreviewImage');
+const uploadProgress = document.getElementById('uploadProgressBar');
+
+videoInput.addEventListener('change', async (e) => {
+    if (!videoInput.files || videoInput.files.length === 0) { thumbPreviewImage.src = ''; return; }
+    const file = videoInput.files[0];
+    // Generate a thumbnail using an offscreen video + canvas
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.src = url;
+    v.muted = true;
+    v.playsInline = true;
+    v.addEventListener('loadeddata', () => {
+        v.currentTime = 0.1;
+    });
+    v.addEventListener('seeked', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = v.videoWidth;
+        canvas.height = v.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+        try {
+            thumbPreviewImage.src = canvas.toDataURL('image/png');
+        } catch (err) {
+            console.warn('Could not create thumbnail', err);
+            thumbPreviewImage.src = '';
+        }
+        URL.revokeObjectURL(url);
+    });
+});
+
+// Handle video upload with progress
+uploadButton.addEventListener('click', (event) => {
     event.preventDefault();
     if (!videoInput.files || videoInput.files.length === 0) return alert('Please select a video file to upload.');
     const formData = new FormData();
     formData.append('video', videoInput.files[0]);
-    
-    try {
-        const response = await fetch('/api/videos', {
-            method: 'POST',
-            body: formData,
-        });
-        const result = await response.json();
-        if (response.ok) {
-            displayUploadedVideo(result);
-        } else {
-            alert(result.message);
+    uploadButton.disabled = true;
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/videos');
+    xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            uploadProgress.style.width = pct + '%';
         }
-    } catch (error) {
-        console.error('Error uploading video:', error);
-    }
+    };
+    xhr.onload = () => {
+        uploadButton.disabled = false;
+        uploadProgress.style.width = '0%';
+        if (xhr.status === 201 || xhr.status === 200) {
+            try {
+                const result = JSON.parse(xhr.responseText);
+                displayUploadedVideo(result);
+                // clear preview & input
+                thumbPreviewImage.src = '';
+                videoInput.value = '';
+            } catch (err) { console.error('Invalid response', err); }
+        } else {
+            alert('Upload failed: ' + xhr.status + ' ' + xhr.statusText);
+        }
+    };
+    xhr.onerror = () => {
+        uploadButton.disabled = false;
+        uploadProgress.style.width = '0%';
+        alert('Upload failed due to network error');
+    };
+    xhr.send(formData);
 });
 
 // Display uploaded video

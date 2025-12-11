@@ -18,6 +18,30 @@ h1 {
     margin-bottom: 20px;
 }
 
+#thumbnailPreview {
+    margin-top: 8px;
+}
+#thumbnailPreview img {
+    max-width: 200px;
+    display: block;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+#uploadProgress {
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+#uploadProgressBar {
+    height: 100%;
+    width: 0%;
+    background: #fff;
+    transition: width 100ms linear;
+}
+
 .comment-section {
     margin-top: 30px;
 }
