@@ -1,0 +1,43 @@
+name: Deploy All (Infra + App)
+
+on:
+  workflow_dispatch:
+    inputs:
+      resourceGroup:
+        description: 'Resource group'
+        required: true
+        default: 'html5video-rg'
+      location:
+        description: 'Location'
+        required: true
+        default: 'eastus'
+      storageAccountName:
+        description: 'Storage account name (optional)'
+        required: false
+      cosmosDbAccountName:
+        description: 'Cosmos DB account name (optional)'
+        required: false
+      webAppName:
+        description: 'Web app name (optional)'
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Run deploy-all
+        env:
+          RESOURCE_GROUP: ${{ github.event.inputs.resourceGroup }}
+          LOCATION: ${{ github.event.inputs.location }}
+          STORAGE_ACCOUNT_NAME: ${{ github.event.inputs.storageAccountName }}
+          COSMOSDB_ACCOUNT_NAME: ${{ github.event.inputs.cosmosDbAccountName }}
+          WEBAPP_NAME: ${{ github.event.inputs.webAppName }}
+        run: |
+          bash ./scripts/deploy-all.sh

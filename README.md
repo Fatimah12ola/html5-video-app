@@ -137,7 +137,27 @@ Quick Azure deployment steps:
 
 CI and GitHub Actions
 - The `ci.yml` workflow runs tests on `push` and `pull_request` to the `main` branch.
-- The `azure-webapp-deploy.yml` workflow runs tests before deploying; ensure `AZURE_WEBAPP_NAME` and `AZURE_WEBAPP_PUBLISH_PROFILE` secrets are set in your GitHub repo.
+- The `azure-webapp-deploy.yml` workflow runs tests and builds your app, then deploys to Azure Web App after the tests pass.
+
+Deployment options in GitHub Actions:
+- Service Principal (recommended): Use `AZURE_CREDENTIALS` secret with the JSON output from `az ad sp create-for-rbac --sdk-auth`. Also set `AZURE_WEBAPP_NAME` and `AZURE_RESOURCE_GROUP`, plus any app settings as secrets (`AZURE_STORAGE_CONNECTION_STRING`, `AZURE_BLOB_CONTAINER`, `AZURE_COSMOS_ENDPOINT`, `AZURE_COSMOS_KEY`). The Actions workflow will use `azure/login@v1` and deploy with the CLI.
+- Publish Profile: Provide `AZURE_WEBAPP_PUBLISH_PROFILE` if you prefer to deploy using the publish profile; set `AZURE_WEBAPP_NAME` as well. This is a fallback if you don't use a service principal.
+
+Create a Service Principal and add GitHub secrets (recommended):
+1) Run (Cloud Shell or an admin account):
+```bash
+az ad sp create-for-rbac --name html5video-sp --role contributor --scopes /subscriptions/<SUB_ID> --sdk-auth
+```
+Copy the JSON output and add it as a GitHub repo secret `AZURE_CREDENTIALS`.
+2) Add other repo secrets for the deploy workflow:
+   - `AZURE_WEBAPP_NAME` — name of the App Service
+   - `AZURE_RESOURCE_GROUP` — resource group name
+   - `AZURE_STORAGE_CONNECTION_STRING` — storage connection string
+   - `AZURE_BLOB_CONTAINER` — `videos`
+   - `AZURE_COSMOS_ENDPOINT` — Cosmos DB endpoint
+   - `AZURE_COSMOS_KEY` — Cosmos DB primary key
+
+We provide `scripts/create-sp.sh` to help create a service principal and return the JSON you can paste into GitHub Secrets.
 
 Tips:
 
